@@ -1,0 +1,14 @@
+SELECT AVG(total_amount_paid.total_rental_amount) AS average_amount_paid
+FROM (SELECT SUM(amount) AS total_rental_amount,
+B.first_name,
+B.last_name,
+C.address, C.postal_code, D.city, E.country
+FROM payment A
+INNER JOIN customer B ON A.customer_id = B.customer_id
+INNER JOIN address C ON B.address_id = C.address_id
+INNER JOIN city D ON C.city_id = D.city_id
+INNER JOIN country E ON D.country_id = E.country_id
+WHERE city IN ('Aurora','Acua','Citrus Heights','Iwaki','Ambattur','Shanwei','So Leopoldo','Teboksary','Tianjin','Cianjur')
+GROUP BY E.country, B.first_name, B.last_name, C.address, C.postal_code, D.city
+ORDER BY total_rental_amount DESC
+LIMIT 5) AS total_amount_paid
