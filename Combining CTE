@@ -1,0 +1,30 @@
+WITH total_customer_cte (total_rental_amount, customer_id, first_name, last_name, 
+address, postal_code, city, country) AS
+(SELECT SUM (E.amount) AS total_rental_amount, 
+A.customer_id, A.first_name, A.last_name, B.address, B.postal_code, C.city, D.country
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_id = D.country_id
+INNER JOIN payment E ON A.customer_id = E.customer_id
+GROUP BY A.customer_id, A.first_name, A.last_name, B.address, B.postal_code, C.city, D.country
+ORDER BY total_rental_amount DESC),
+top_5_customer_cte (total_rental_amount, customer_id, first_name, last_name, 
+address, postal_code, city, country) AS 
+(SELECT SUM (E.amount) AS total_rental_amount, 
+A.customer_id, A.first_name, A.last_name, B.address, B.postal_code, C.city, D.country
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_id = D.country_id
+INNER JOIN payment E ON A.customer_id = E.customer_id
+GROUP BY A.customer_id, A.first_name, A.last_name, B.address, B.postal_code, C.city, D.country
+ORDER BY total_rental_amount DESC
+LIMIT 5)
+SELECT A.country,
+COUNT (A.customer_id) AS total_customers_by_country,
+COUNT (B.customer_id) AS top_5_customers_by_country
+FROM total_customer_cte A
+LEFT JOIN top_5_customer_cte B ON A.customer_id = B.customer_id
+GROUP BY A.country
+ORDER BY total_customers_by_country DESC, top_5_customers_by_country DESC
