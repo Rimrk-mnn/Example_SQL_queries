@@ -8,3 +8,6 @@ Main business questions asked were
 - Where are customers with a high lifetime value based?
 - Do sales figures vary between geographic regions?
 Data set is example data from the official Porstgres manual
+
+## related links
+[Rockbuster 3.10.pdf](https://github.com/Rimrk-mnn/Example_SQL_queries/files/11018081/Rockbuster.3.10.pdf)
